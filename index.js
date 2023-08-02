@@ -18,21 +18,6 @@ const keys = {
     'ArrowRight' : {isPressed : false}
 }
 
-function collision(_p1, _p2) {
-    // P1 ->P2
-    if((_p1.attackBox.position.x + _p1.attackBox.width) >= _p2.position.x && _p1.attackBox.position.x <= (_p2.position.x + _p2.width)
-        && (_p1.attackBox.position.y + _p1.attackBox.height) >= _p2.position.y && _p1.attackBox.position.y <= (_p2.position.y + _p2.height)
-        && _p1.isAttacking) {
-            console.log('P1 attacked!')
-        }
-    // P2 -> P1
-    if ((_p2.attackBox.position.x + _p2.attackBox.width) >= _p1.position.x && _p2.attackBox.position.x <= (_p1.position.x + _p1.width)
-        && (_p2.attackBox.position.y + _p2.attackBox.height) >= _p1.position.y && _p2.attackBox.position.y <= (_p2.position.y + _p2.height)
-        && _p2.isAttacking) {
-        console.log('P2 Attacked!')
-    }
-}
-
 class Sprite {
     constructor({position, velocity, color='red', offset}) {
         this.position = position
@@ -52,6 +37,7 @@ class Sprite {
             offset,
             color : 'green'
         }
+        this.healthBar
     }
 
     draw() {
@@ -212,4 +198,21 @@ window.addEventListener('keyup', (event) => {
             keys.ArrowRight.isPressed = false
             break
     }
+
+    // Collision detection
+    
+    function collision(_p1, _p2) {
+        // P1 ->P2
+        if((_p1.attackBox.position.x + _p1.attackBox.width) >= _p2.position.x && _p1.attackBox.position.x <= (_p2.position.x + _p2.width)
+            && (_p1.attackBox.position.y + _p1.attackBox.height) >= _p2.position.y && _p1.attackBox.position.y <= (_p2.position.y + _p2.height)
+            && _p1.isAttacking) {
+                console.log('P1 attacked!')
+            }
+        // P2 -> P1
+        if ((_p2.attackBox.position.x + _p2.attackBox.width) >= _p1.position.x && _p2.attackBox.position.x <= (_p1.position.x + _p1.width)
+            && (_p2.attackBox.position.y + _p2.attackBox.height) >= _p1.position.y && _p2.attackBox.position.y <= (_p2.position.y + _p2.height)
+            && _p2.isAttacking) {
+            console.log('P2 Attacked!')
+        }
+}
 })
