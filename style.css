@@ -1,7 +1,20 @@
-.header {
+.wrapper * {
+    box-sizing: border-box;
     position: relative;
-
 }
-.health-bar {
-    width: 100;
+.top-bar {
+    align-items: center;
+    display: flex;
+}
+.health {
+    width: 100%;
+    height: 50px;
+    background-color: yellow;
+}
+.timer {
+    width: 150px;
+    height: 100px;
+    background-color:maroon;
+    font-size: 60px;
+    text-align: center;
 }

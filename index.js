@@ -1,8 +1,17 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-
+const healthP1 = document.querySelectorAll('.health')[0]
+const healthP2 = document.querySelectorAll('.health')[1]
+const timer = document.querySelector('.timer')
+console.log(healthP1)
 canvas.width = 1024;
 canvas.height = 576;
+// Timer
+let counter = 0
+setInterval(() => {
+    counter += 1
+    timer.innerHTML = counter;
+}, 1000);
 
 const gravity = 0.7
 const keys = {
@@ -37,7 +46,7 @@ class Sprite {
             offset,
             color : 'green'
         }
-        this.healthBar
+        this.health = 100
     }
 
     draw() {
@@ -90,7 +99,6 @@ const p2 = new Sprite({
         x: -50, y:0
     }
 })
-
 
 // Animation Frame
 function animate() {
@@ -198,21 +206,27 @@ window.addEventListener('keyup', (event) => {
             keys.ArrowRight.isPressed = false
             break
     }
-
-    // Collision detection
-    
-    function collision(_p1, _p2) {
-        // P1 ->P2
-        if((_p1.attackBox.position.x + _p1.attackBox.width) >= _p2.position.x && _p1.attackBox.position.x <= (_p2.position.x + _p2.width)
-            && (_p1.attackBox.position.y + _p1.attackBox.height) >= _p2.position.y && _p1.attackBox.position.y <= (_p2.position.y + _p2.height)
-            && _p1.isAttacking) {
-                console.log('P1 attacked!')
-            }
-        // P2 -> P1
-        if ((_p2.attackBox.position.x + _p2.attackBox.width) >= _p1.position.x && _p2.attackBox.position.x <= (_p1.position.x + _p1.width)
-            && (_p2.attackBox.position.y + _p2.attackBox.height) >= _p1.position.y && _p2.attackBox.position.y <= (_p2.position.y + _p2.height)
-            && _p2.isAttacking) {
-            console.log('P2 Attacked!')
-        }
-}
 })
+
+// Collision detection
+    
+function collision(_p1, _p2) {
+    // P1 ->P2
+    if((_p1.attackBox.position.x + _p1.attackBox.width) >= _p2.position.x && _p1.attackBox.position.x <= (_p2.position.x + _p2.width)
+        && (_p1.attackBox.position.y + _p1.attackBox.height) >= _p2.position.y && _p1.attackBox.position.y <= (_p2.position.y + _p2.height)
+        && _p1.isAttacking) {
+            console.log('P1 attacked!')
+            p2.health -= 5
+            console.log(p2.health + '%' )
+            healthP2.style.width = (p2.health) + '%' 
+        }
+    // P2 -> P1
+    if ((_p2.attackBox.position.x + _p2.attackBox.width) >= _p1.position.x && _p2.attackBox.position.x <= (_p1.position.x + _p1.width)
+        && (_p2.attackBox.position.y + _p2.attackBox.height) >= _p1.position.y && _p2.attackBox.position.y <= (_p2.position.y + _p2.height)
+        && _p2.isAttacking) {
+        console.log('P2 Attacked!')
+        p1.health -= 5
+        console.log(p1.health + '%' )
+        healthP1.style.width = (p1.health) + '%'
+    }
+}
