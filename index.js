@@ -122,7 +122,18 @@ function animate() {
     } 
 
     // Collision Detection
-    collision(p1, p2)
+    if (rectangularCollision({rect1: p1, rect2: p2}) && p1.isAttacking) {
+        p1.isAttacking = false
+        console.log('P1 attacked!')
+        p2.health -= 5
+        healthP2.style.width = (p2.health) + '%' 
+    }
+    if (rectangularCollision({rect1: p2, rect2: p1}) && p2.isAttacking) {
+        p2.isAttacking = false
+        console.log('P1 attacked!')
+        p1.health -= 5
+        healthP2.style.width = (p1.health) + '%' 
+    }
 }
 
 animate()
@@ -210,23 +221,9 @@ window.addEventListener('keyup', (event) => {
 
 // Collision detection
     
-function collision(_p1, _p2) {
-    // P1 ->P2
-    if((_p1.attackBox.position.x + _p1.attackBox.width) >= _p2.position.x && _p1.attackBox.position.x <= (_p2.position.x + _p2.width)
-        && (_p1.attackBox.position.y + _p1.attackBox.height) >= _p2.position.y && _p1.attackBox.position.y <= (_p2.position.y + _p2.height)
-        && _p1.isAttacking) {
-            console.log('P1 attacked!')
-            p2.health -= 5
-            console.log(p2.health + '%' )
-            healthP2.style.width = (p2.health) + '%' 
-        }
-    // P2 -> P1
-    if ((_p2.attackBox.position.x + _p2.attackBox.width) >= _p1.position.x && _p2.attackBox.position.x <= (_p1.position.x + _p1.width)
-        && (_p2.attackBox.position.y + _p2.attackBox.height) >= _p1.position.y && _p2.attackBox.position.y <= (_p2.position.y + _p2.height)
-        && _p2.isAttacking) {
-        console.log('P2 Attacked!')
-        p1.health -= 5
-        console.log(p1.health + '%' )
-        healthP1.style.width = (p1.health) + '%'
-    }
+function rectangularCollision({rect1, rect2}) {
+    return ((rect1.attackBox.position.x + rect1.attackBox.width) >= rect2.position.x 
+        && rect1.attackBox.position.x <= (rect2.position.x + rect2.width)
+        && (rect1.attackBox.position.y + rect1.attackBox.height) >= rect2.position.y 
+        && rect1.attackBox.position.y <= (rect2.position.y + rect2.height));   
 }
