@@ -1,13 +1,19 @@
-.wrapper * {
+body * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.wrapper {
     box-sizing: border-box;
     position: relative;
+    display: inline-block;
 }
-.top-bar {
-    align-items: center;
+.hud {
     display: flex;
-}
-.header {
-    position: relative;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    padding: 10px;
 }
 .health {
     width: 100%;
@@ -15,7 +21,8 @@
     background-color: yellow;
 }
 .timer {
-    width: 150px;
+    flex-shrink: 0;
+    width: 100px;
     height: 100px;
     background-color:maroon;
     font-size: 60px;
