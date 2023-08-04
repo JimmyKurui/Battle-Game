@@ -3,13 +3,13 @@ const c = canvas.getContext('2d')
 const healthP1 = document.querySelectorAll('.health')[0]
 const healthP2 = document.querySelectorAll('.health')[1]
 const timer = document.querySelector('.timer')
-console.log(healthP1)
+
 canvas.width = 1024;
 canvas.height = 576;
 // Timer
-let counter = 0
-setInterval(() => {
-    counter += 1
+let counter = timer.innerHTML
+timerId = setInterval(() => {
+    counter -= 1
     timer.innerHTML = counter;
 }, 1000);
 
@@ -132,7 +132,31 @@ function animate() {
         p2.isAttacking = false
         console.log('P1 attacked!')
         p1.health -= 5
-        healthP2.style.width = (p1.health) + '%' 
+        healthP1.style.width = (p1.health) + '%' 
+    }
+
+    /* Player Score
+     1. timer based
+     2. health based */
+    if(timer.innerHTML === 0) {
+        if(p1.health > p2.health) {
+            console.log('P1 wins!')
+        }
+        else if (p2.health > p1.health) {
+            console.log('P2 wins!')
+        }
+        else {
+            console.log('Game tie!')
+        }
+    }
+    if(p2.health === 0) {
+        // clearInterval(timerId)
+        console.log('P1 wins!')
+    }
+    else if (p1.health === 0) {
+        // clearInterval(timerId)
+        console.log('P2 wins!')
+        cancelAnimationFrame(animate)
     }
 }
 
