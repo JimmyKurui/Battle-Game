@@ -3,17 +3,15 @@ const c = canvas.getContext('2d')
 const healthP1 = document.querySelectorAll('.health')[0]
 const healthP2 = document.querySelectorAll('.health')[1]
 const timer = document.querySelector('.timer')
+const message = document.querySelector('.message')
+
+let counter = 5
+let timerId
 
 canvas.width = 1024;
 canvas.height = 576;
-// Timer
-let counter = timer.innerHTML
-timerId = setInterval(() => {
-    counter -= 1
-    timer.innerHTML = counter;
-}, 1000);
-
 const gravity = 0.7
+
 const keys = {
     // p1
     'w' : {isPressed : false},
@@ -100,66 +98,9 @@ const p2 = new Sprite({
     }
 })
 
-// Animation Frame
-function animate() {
-    requestAnimationFrame(animate)
-    c.fillStyle = 'black'
-    c.fillRect(0, 0, canvas.width, canvas.height)
-    p1.update()
-    p2.update()
-
-    // Free movement
-    if(keys.a.isPressed && p1.lastKey === 'a') {
-        p1.velocity.x = -5
-    } else if (keys.d.isPressed && p1.lastKey === 'd') {
-        p1.velocity.x = 5
-    }
-
-    if(keys.ArrowLeft.isPressed && p2.lastKey === 'ArrowLeft') {
-        p2.velocity.x = -5
-    } else if (keys.ArrowRight.isPressed && p2.lastKey === 'ArrowRight') {
-        p2.velocity.x = 5
-    } 
-
-    // Collision Detection
-    if (rectangularCollision({rect1: p1, rect2: p2}) && p1.isAttacking) {
-        p1.isAttacking = false
-        console.log('P1 attacked!')
-        p2.health -= 5
-        healthP2.style.width = (p2.health) + '%' 
-    }
-    if (rectangularCollision({rect1: p2, rect2: p1}) && p2.isAttacking) {
-        p2.isAttacking = false
-        console.log('P1 attacked!')
-        p1.health -= 5
-        healthP1.style.width = (p1.health) + '%' 
-    }
-
-    /* Player Score
-     1. timer based
-     2. health based */
-    if(timer.innerHTML === 0) {
-        if(p1.health > p2.health) {
-            console.log('P1 wins!')
-        }
-        else if (p2.health > p1.health) {
-            console.log('P2 wins!')
-        }
-        else {
-            console.log('Game tie!')
-        }
-    }
-    if(p2.health === 0) {
-        // clearInterval(timerId)
-        console.log('P1 wins!')
-    }
-    else if (p1.health === 0) {
-        // clearInterval(timerId)
-        console.log('P2 wins!')
-        cancelAnimationFrame(animate)
-    }
-}
-
+// Timer
+decreaseTimer()
+// Animation frame
 animate()
 
 // Event Listeners
@@ -243,11 +184,78 @@ window.addEventListener('keyup', (event) => {
     }
 })
 
+// ================================ FUNCTIONS =============================
+
 // Collision detection
-    
 function rectangularCollision({rect1, rect2}) {
     return ((rect1.attackBox.position.x + rect1.attackBox.width) >= rect2.position.x 
         && rect1.attackBox.position.x <= (rect2.position.x + rect2.width)
         && (rect1.attackBox.position.y + rect1.attackBox.height) >= rect2.position.y 
         && rect1.attackBox.position.y <= (rect2.position.y + rect2.height));   
+}
+
+function determineWinner({p1, p2, timerId}) {
+    clearTimeout(timerId)
+    message.style.display = 'flex'
+    if (p1.health === p2.health) {
+        message.innerHTML = 'Tie!'
+    }
+    if (p1.health > p2.health) {
+        message.innerHTML = 'P1 Wins!'
+    }
+    if (p1.health < p2.health) {
+        message.innerHTML = 'P2 Wins!'
+    }
+}
+
+// Timer Function
+function decreaseTimer() {
+    if(counter > 0) {
+        timerId = setTimeout(decreaseTimer, 1000);
+        counter--
+        timer.innerHTML = counter;
+    }
+    if (counter === 0) {
+        determineWinner({p1, p2, timerId})
+    }
+}
+
+// Animation Function
+function animate() {
+    requestAnimationFrame(animate)
+    c.fillStyle = 'black'
+    c.fillRect(0, 0, canvas.width, canvas.height)
+    p1.update()
+    p2.update()
+
+    // Free movement
+    if(keys.a.isPressed && p1.lastKey === 'a') {
+        p1.velocity.x = -5
+    } else if (keys.d.isPressed && p1.lastKey === 'd') {
+        p1.velocity.x = 5
+    }
+
+    if(keys.ArrowLeft.isPressed && p2.lastKey === 'ArrowLeft') {
+        p2.velocity.x = -5
+    } else if (keys.ArrowRight.isPressed && p2.lastKey === 'ArrowRight') {
+        p2.velocity.x = 5
+    } 
+
+    // Collision Detection
+    if (rectangularCollision({rect1: p1, rect2: p2}) && p1.isAttacking) {
+        p1.isAttacking = false
+        console.log('P1 attacked!')
+        p2.health -= 5
+        healthP2.style.width = (p2.health) + '%' 
+    }
+    if (rectangularCollision({rect1: p2, rect2: p1}) && p2.isAttacking) {
+        p2.isAttacking = false
+        console.log('P2 attacked!')
+        p1.health -= 5
+        healthP1.style.width = (p1.health) + '%' 
+    }
+    // End Game - Health
+    if (p1.health <= 0 || p2.health <= 0) {
+        determineWinner({p1, p2, timerId})
+    }
 }

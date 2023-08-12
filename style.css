@@ -40,3 +40,15 @@
     display: flex;
     justify-content: flex-end;
 }
+.message { 
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: bisque;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    font-size: 60px;
+}
