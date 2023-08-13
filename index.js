@@ -33,6 +33,15 @@ const background = new Sprite({
     imageSrc: './img/background.png'
 })
 
+// Shop
+const shop = new Sprite({
+    position: {
+        x: 600, y: 223 
+    },
+    imageSrc: './img/shop.png',
+    scale: 2,
+    framesMax: 6
+})
 // Players
 const p1 = new Fighter({
     position: {

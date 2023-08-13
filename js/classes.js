@@ -1,19 +1,46 @@
 // Sprite (Graphics) 
 class Sprite {
-    constructor({position, imageSrc}) {
+    constructor({position, imageSrc, scale=1, framesMax = 1}) {
         this.position = position
         this.width = 50
         this.height = 100
         this.image = new Image()
         this.image.src = imageSrc
+        this.scale = scale
+        // Sprite animation
+        this.framesMax = framesMax
+        this.framesCurrent = 0
+        // Frame rate
+        this.framesHold = 5
+        this.framesElapsed = 0
     }
 
     draw() {
-        c.drawImage(this.image, this.position.x, this.position.y)
+        c.drawImage(
+            this.image,
+            // Cropping
+            this.framesCurrent * (this.image.width/ this.framesMax),
+            0,
+            this.image.width/ this.framesMax,
+            this.image.height,
+            // Drawing 
+            this.position.x, 
+            this.position.y, 
+            this.image.width / this.framesMax * this.scale,
+            this.image.height * this.scale)
     }
 
     update() {
         this.draw()
+        this.framesElapsed++
+
+        if (this.framesElapsed % this.framesHold === 0) {
+            if(this.framesCurrent < this.framesMax-1) {
+                this.framesCurrent++
+            } else {
+                this.framesCurrent = 0
+            }
+        }
     }
 }
 

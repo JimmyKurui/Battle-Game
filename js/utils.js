@@ -38,6 +38,7 @@ function animate() {
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
     background.update()
+    shop.update()
     p1.update()
     p2.update()
 
