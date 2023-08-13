@@ -1,4 +1,24 @@
+// Sprite (Graphics) 
 class Sprite {
+    constructor({position, imageSrc}) {
+        this.position = position
+        this.width = 50
+        this.height = 100
+        this.image = new Image()
+        this.image.src = imageSrc
+    }
+
+    draw() {
+        c.drawImage(this.image, this.position.x, this.position.y)
+    }
+
+    update() {
+        this.draw()
+    }
+}
+
+// Player Character
+class Fighter {
     constructor({position, velocity, color='red', offset}) {
         this.position = position
         this.velocity = velocity
@@ -38,7 +58,7 @@ class Sprite {
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
         
-        if (this.position.y + this.height + this.velocity.y >= canvas.height) {
+        if (this.position.y + this.height + this.velocity.y >= canvas.height-95) {
             this.velocity.y = 0
         } else { 
             this.velocity.y += gravity

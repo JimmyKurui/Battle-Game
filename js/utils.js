@@ -37,6 +37,7 @@ function animate() {
     requestAnimationFrame(animate)
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
+    background.update()
     p1.update()
     p2.update()
 
@@ -56,16 +57,15 @@ function animate() {
     // Collision Detection
     if (rectangularCollision({rect1: p1, rect2: p2}) && p1.isAttacking) {
         p1.isAttacking = false
-        console.log('P1 attacked!')
         p2.health -= 5
         healthP2.style.width = (p2.health) + '%' 
     }
     if (rectangularCollision({rect1: p2, rect2: p1}) && p2.isAttacking) {
         p2.isAttacking = false
-        console.log('P2 attacked!')
         p1.health -= 5
         healthP1.style.width = (p1.health) + '%' 
     }
+
     // End Game - Health
     if (p1.health <= 0 || p2.health <= 0) {
         determineWinner({p1, p2, timerId})
